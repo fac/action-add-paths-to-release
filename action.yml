@@ -22,6 +22,10 @@ runs:
       shell: bash
       id: rewrite-release
       run: |
+        exec 19> >( sed -e's/^/::debug::/g' )
+        BASH_XTRACEFD=19
+        set -x
+
         function files_changed() {
           local pr="$1"
           local cut_until="${2:-2}"
