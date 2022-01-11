@@ -47,10 +47,8 @@ runs:
         }
 
         function add_files_to_release_notes() {
-          local release_id="$1"
-          local cut_until="${2:-2}"
-          local exclude_pattern="$3"
-          gh api repos/"${{ github.repository }}/releases/$release_id" --jq .body 2>&19 |
+          local cut_until="${1:-2}"
+          local exclude_pattern="$2"
             while read -r line
             do
               pr=$(echo "$line" | grep '(#[[:digit:]]*)' | sed -e's/.*(#\(.*\)).*/\1/' )
@@ -68,7 +66,8 @@ runs:
             done
         }
 
-        add_files_to_release_notes "${{ inputs.release-id }}" "${{ inputs.path-prefix-parts }}" "${{ inputs.exclude-pattern }}" |
+        gh api repos/"${{ github.repository }}/releases/${{inputs.release-id }}" --jq .body 2>&19 |
+        add_files_to_release_notes "${{ inputs.path-prefix-parts }}" "${{ inputs.exclude-pattern }}" |
           gh api -X PATCH repos/"${{ github.repository }}/releases/${{ inputs.release-id }}" 2>&19 \
             --field body=@- \
             --field tag_name="$( gh api repos/${{ github.repository }}/releases/${{ inputs.release-id }} --jq .tag_name 2>&19 )" |
