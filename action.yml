@@ -66,10 +66,11 @@ runs:
             done
         }
 
-        gh api repos/"${{ github.repository }}/releases/${{inputs.release-id }}" --jq .body 2>&19 |
+        RELEASE_URL="repos/${{ github.repository }}/releases/${{inputs.release-id }}"
+        gh api "$RELEASE_URL" --jq .body 2>&19 |
         add_files_to_release_notes "${{ inputs.path-prefix-parts }}" "${{ inputs.exclude-pattern }}" |
-          gh api -X PATCH repos/"${{ github.repository }}/releases/${{ inputs.release-id }}" 2>&19 \
+          gh api -X PATCH "$RELEASE_URL" 2>&19 \
             --field body=@- \
-            --field tag_name="$( gh api repos/${{ github.repository }}/releases/${{ inputs.release-id }} --jq .tag_name 2>&19 )" |
+            --field tag_name="$( gh api "$RELEASE_URL" --jq .tag_name 2>&19 )" |
           jq .body | # escaped, but with quotes
           xargs -I% echo ::set-output name=body::%
