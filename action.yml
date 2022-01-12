@@ -35,7 +35,7 @@ runs:
             ( grep / || true ) |
             if [ -n "$exclude_pattern" ]
             then
-              ( grep -v "$exclude_pattern" || true )
+              ( grep -v -E "$exclude_pattern" || true )
             else
               cat
             fi |
