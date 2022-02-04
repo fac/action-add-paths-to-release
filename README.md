@@ -52,7 +52,7 @@ And using a simple template for Release Drafter, the notes for the draft release
 
 * `services/foo` PR 1 (#1)
 * `docs/bar.md`, `services/bar` PR 2 (#2)
-# PR 3 (#3)
+* PR 3 (#3)
 ```
 
 ## Inputs
