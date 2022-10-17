@@ -73,4 +73,4 @@ runs:
             --field body=@- \
             --field tag_name="$( gh api "$RELEASE_URL" --jq .tag_name 2>&19 )" |
           jq .body | # escaped, but with quotes
-          xargs -I% echo ::set-output name=body::%
+          xargs -I% echo "body=%" >> "$GITHUB_OUTPUT"
